@@ -33,19 +33,24 @@ const CAT_ICONS = {
 };
 function catIcon(name, type) { return CAT_ICONS[name] || (type === 'income' ? '💵' : '💳'); }
 
-/* Count-up animation for dashboard numbers */
+/* Count-up flourish for dashboard numbers.
+   The final value is written to the DOM first (in the HTML and again here), so if
+   rAF never runs or stalls — background tab, Low Power Mode — the correct number
+   is always what shows. The animation only ever overwrites it transiently. */
 function animateCounters(scope) {
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hidden = typeof document !== 'undefined' && document.hidden;
   $$('[data-count]', scope || document).forEach(el => {
     const target = parseFloat(el.dataset.count);
     const display = el.dataset.display || money(target);
-    if (reduce || isNaN(target)) { el.textContent = display; return; }
+    el.textContent = display;
+    if (reduce || hidden || isNaN(target)) return;
     const dur = 750, t0 = performance.now();
     const step = now => {
       const p = Math.min(1, (now - t0) / dur);
       const e = 1 - Math.pow(1 - p, 3);
-      el.textContent = money(Math.round(target * e));
-      if (p < 1) requestAnimationFrame(step); else el.textContent = display;
+      el.textContent = p < 1 ? money(Math.round(target * e)) : display;
+      if (p < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
   });
@@ -1143,7 +1148,7 @@ function loadSampleData() {
   if (TX().length && !confirm('Add sample transactions on top of your current data?')) return;
   const now = new Date();
   const rnd = (a, b) => Math.round(a + Math.random() * (b - a));
-  for (let mAgo = 3; mAgo >= 0; mAgo--) {
+  for (let mAgo = 5; mAgo >= 0; mAgo--) {
     const base = new Date(now.getFullYear(), now.getMonth() - mAgo, 1);
     const mk = `${base.getFullYear()}-${pad(base.getMonth() + 1)}`;
     TX().push(mkTx('income', rnd(45000, 55000), 'Salary', `${mk}-01`, null, 'Monthly salary'));
