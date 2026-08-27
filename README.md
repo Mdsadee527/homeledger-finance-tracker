@@ -39,3 +39,6 @@ Works in Chrome, Edge, Firefox, Safari — desktop, tablet, and mobile.
   computer and browser profile can open the app. Don't treat it as a vault.
 - Files: `index.html` (markup), `styles.css` (design, responsive + print), `app.js` (all logic).
   Everything is dependency‑free vanilla JS; charts are hand‑drawn SVG.
+- `index.html` loads `styles.css?v=N` / `app.js?v=N`. After changing CSS or JS,
+  bump `N` in both `<link>` and `<script>` tags so visitors' browsers fetch the
+  new files instead of a cached copy.
