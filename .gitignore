@@ -1,0 +1,7 @@
+# dev / local
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+__serve.js
+.vscode/
