@@ -399,10 +399,14 @@ svg.chart { display: block; width: 100%; height: auto; overflow: visible; }
 .budget-item .nums { font-size: 13px; color: var(--text-soft); }
 .progress { height: 10px; border-radius: 999px; background: var(--surface-2); overflow: hidden; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .06); }
 .progress > span {
-  display: block; height: 100%; border-radius: 999px; width: 0;
+  display: block; height: 100%; border-radius: 999px;
   background: var(--grad-green);
-  transition: width 1s cubic-bezier(.2, .8, .2, 1);
+  transform-origin: left center;
 }
+@media (prefers-reduced-motion: no-preference) {
+  .progress > span { animation: barFill .9s cubic-bezier(.2, .8, .2, 1) both; }
+}
+@keyframes barFill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 .progress.warn > span { background: var(--grad-budget); }
 .progress.over > span { background: var(--grad-coral); }
 .budget-alert {

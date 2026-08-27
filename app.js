@@ -633,7 +633,6 @@ function renderBudget() {
       </div>
     </div>
   `;
-  requestAnimationFrame(() => $$('#view .progress > span').forEach(el => el.style.width = el.dataset.w));
 
   if ($('#addBudget')) $('#addBudget').addEventListener('click', () => budgetModal(null, unbudgeted));
   $$('#view [data-editb]').forEach(el => el.addEventListener('click', () => {
@@ -657,7 +656,7 @@ function budgetRow(b, spent) {
       <button class="btn btn-ghost btn-sm" data-delb="${b.id}" title="Remove">🗑</button>
     </div>
     <div class="bc-nums"><span>Spent <b>${money(spent)}</b></span><span>Budget <b>${money(b.amount)}</b></span></div>
-    <div class="progress ${cls}"><span data-w="${Math.min(100, pct).toFixed(1)}%"></span></div>
+    <div class="progress ${cls}"><span style="width:${Math.min(100, pct).toFixed(1)}%"></span></div>
     <div class="bc-nums" style="margin-top:8px;margin-bottom:0">
       <span>${remaining >= 0 ? 'Remaining' : 'Over by'} <b class="${remaining >= 0 ? 'amt-income' : 'amt-expense'}">${money(Math.abs(remaining))}</b></span>
       <span class="muted">${pct.toFixed(0)}% used</span>
